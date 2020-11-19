@@ -5,20 +5,29 @@
 
 
 
-function_n() {
+typedef struct zoznam{
+	char meno[50];
+	char druh[30];
+	char vyska[30];
+	char vaha[30];
+	char datum[20];
+	char krmenie[20];
+	char meno_osetrovatela[50];
+	struct zoznam* link;
+}ZOZNAM; 
+
+
+
+
+
+
+
+
+
+function_n(ZOZNAM* p_A) {
 	FILE* file;
 	file = fopen("zvierata.txt", "r");
 	
-	typedef struct zoznam {
-		char meno[50];
-		char druh[30];
-		char vyska[30];
-		char vaha[30];
-		char datum[20];
-		char krmenie[20];
-		char meno_osetrovatela[50];
-		struct zoznam *link;
-	}ZOZNAM;
 
 
 	char buff[100];
@@ -27,13 +36,11 @@ function_n() {
 		if (strcmp(buff, "$$$\n") == 0) {
 			n++;
 		}
-		
 	}
 	
 
 
-	ZOZNAM *p_A = (ZOZNAM*)malloc(n * sizeof(ZOZNAM));
-	//ZOZNAM A = (ZOZNAM*)malloc(n * sizeof(ZOZNAM));
+	
 	
 	
 	if (p_A == NULL) {
@@ -44,7 +51,7 @@ function_n() {
 	}
 
 	fseek(file, 0, SEEK_SET);
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < 2; i++) {
 		fgets(buff, sizeof(buff), file);
 		
 
@@ -68,16 +75,36 @@ function_n() {
 
 		fgets(buff, sizeof(buff), file);
 		strcpy(p_A[i].meno_osetrovatela, buff);
-
 	}
-	
-	printf("%s", p_A[0].meno);
-	
+
+	for (int i = 0; i < 2; i++) {
+		puts("");
+		printf("Meno : %s", p_A[i].meno);
+		printf("Druh : %s", p_A[i].druh);
+		printf("Vyska : %s", p_A[i].vyska);
+		printf("Vaha : %s", p_A[i].vaha);
+		printf("datum : %s", p_A[i].datum);
+		printf("krmenie : %s", p_A[i].krmenie);
+		printf("osetrovatel : %s", p_A[i].meno_osetrovatela);
+		puts("");
+	}
 }
 
 
-function_v() {
+function_v(ZOZNAM* p_A) {
 
+
+	for (int i = 0; i < 2; i++) {
+		puts("");
+		printf("Meno : %s", p_A[i].meno);
+		printf("Druh : %s", p_A[i].druh);
+		printf("Vyska : %s", p_A[i].vyska);
+		printf("Vaha : %s", p_A[i].vaha);
+		printf("datum : %s", p_A[i].datum);
+		printf("krmenie : %s", p_A[i].krmenie);
+		printf("osetrovatel : %s", p_A[i].meno_osetrovatela);
+		puts("");
+	}
 }
 
 function_p() {
@@ -99,12 +126,13 @@ function_a() {
 
 int main() {
 	char input;
+	ZOZNAM *a = (ZOZNAM*)malloc(2 * sizeof(ZOZNAM));
 	while (scanf("%c", &input)) {
 		if (input == 'n') {
-			function_n();
+			function_n(&a);
 		}
 		if (input == 'v') {
-			function_v();
+			function_v(&a);
 		}
 		if (input == 'p') {
 			function_p();
