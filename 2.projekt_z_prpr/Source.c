@@ -201,10 +201,10 @@ void function_n(ZOZNAM**a,int *pocet) {
 	fseek(file, 0, SEEK_SET);
 	char buff[100];
 	int n = 0;
-	pocet = 0;
+	*pocet = 0;
 		while (fgets(buff, sizeof(buff), file) != NULL) {
 			if (strcmp(buff, "$$$\n") == 0) {
-				pocet++;
+				(*pocet)++;
 				n++;
 			}
 		}
@@ -293,7 +293,7 @@ int main()
 	while (scanf("%c", &input)) {
 		printf("%d",pocet);
 		if (input == 'n') {
-			function_n(&zvierata,&pocet);
+			function_n(&zvierata,pocet);
 		}
 		if (input == 'v') {
 			function_v(zvierata,pocet);
