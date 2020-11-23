@@ -13,18 +13,23 @@ typedef struct zoznam{ // zoznam --> nazov struktury
 	long long datum;
 	long long krmenie;
 	char meno_osetrovatela[50];
-	struct zoznam* link;
+	struct zoznam* dalsi;
 }ZOZNAM;  // TYP (nieÈo ako int, float)
 
 
 
+void uvolni(ZOZNAM* p_zaciatok)
+{
+	ZOZNAM* p_akt = p_zaciatok;
+	while (p_zaciatok != NULL)
+	{
+		p_akt = p_zaciatok;
+		p_zaciatok = p_zaciatok->dalsi;
+		
+	}
+}
 
-
-
-
-
-
-function_n(ZOZNAM* p_A) {
+function_n(ZOZNAM **p_zac) {
 	FILE* file;
 	file = fopen("zvierata.txt", "r");
 	if (file == NULL) {
@@ -32,21 +37,27 @@ function_n(ZOZNAM* p_A) {
 		exit(1);
 	}
 	
-
+	
 
 	char buff[100];
-	int n = 0; //pocet zvieracich zaznamov
+	int pocet_zaznamov = 0; //pocet zvieracich zaznamov
 	while (fgets(buff, sizeof(buff), file) != NULL) {
 		if (strcmp(buff, "$$$\n") == 0) {
-			n++;
+			pocet_zaznamov++;
 		}
 	}
+	ZOZNAM* p_A = NULL;
+	if (*p_zac == NULL) {
+		printf("NEBOL VYTVORENY\n");
+		p_A = (ZOZNAM*)malloc(pocet_zaznamov * sizeof(ZOZNAM));
+	}
+	else {
+		uvolni(p_zac);
+		return;
+	}
+	
 	
 
-
-	
-	
-	
 	if (p_A == NULL) {
 		printf("ERROR IN ALLOCATING MEMORY FOR A\n");
 	}
@@ -86,13 +97,30 @@ function_n(ZOZNAM* p_A) {
 		fgets(buff, sizeof(buff), file);
 		buff[strlen(buff) - 1] = '\0';
 		strcpy(p_A[i].meno_osetrovatela, buff);
+		
+		p_A[i].dalsi = (*p_zac);
+		(*p_zac) = p_A;
 	}
+	printf("Nacitalo sa <%d> zaznamov", pocet_zaznamov);
+	for (int i = 0; i < 2; i++) {
+		puts("");
+		printf("Meno : %s\n", p_A[i].meno);
+		printf("Druh : %s\n", p_A[i].druh);
+		printf("Vyska : %d\n", p_A[i].vyska);
+		printf("Vaha : %g\n", p_A[i].vaha);
+		printf("datum : %lld\n", p_A[i].datum);
+		printf("krmenie : %lld\n", p_A[i].krmenie);
+		printf("osetrovatel : %s\n", p_A[i].meno_osetrovatela);
+	}
+	fclose(file);
 }
 
 
-function_v(ZOZNAM* p_A) {
+function_v(ZOZNAM *p_A) {
 
-
+	if (p_A == NULL) {
+		return;
+	}
 	for (int i = 0; i < 2; i++) {
 		puts("");
 		printf("Meno : %s\n", p_A[i].meno);
@@ -124,13 +152,14 @@ function_a() {
 
 int main() {
 	char input;
-	ZOZNAM *a = (ZOZNAM*)malloc(2 * sizeof(ZOZNAM));
+	ZOZNAM *zvierata = NULL;
+	
 	while (scanf("%c", &input)) {
 		if (input == 'n') {
-			function_n(&a);
+			function_n(&zvierata);
 		}
 		if (input == 'v') {
-			function_v(&a);
+			function_v(zvierata);
 		}
 		if (input == 'p') {
 			function_p();
