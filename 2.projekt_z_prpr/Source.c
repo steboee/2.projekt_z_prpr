@@ -5,16 +5,16 @@
 
 
 
-typedef struct zoznam{
+typedef struct zoznam{ // zoznam --> nazov struktury
 	char meno[50];
 	char druh[30];
-	char vyska[30];
-	char vaha[30];
-	char datum[20];
-	char krmenie[20];
+	int vyska;
+	float vaha;
+	long long datum;
+	long long krmenie;
 	char meno_osetrovatela[50];
 	struct zoznam* link;
-}ZOZNAM; 
+}ZOZNAM;  // TYP (nie»o ako int, float)
 
 
 
@@ -27,6 +27,10 @@ typedef struct zoznam{
 function_n(ZOZNAM* p_A) {
 	FILE* file;
 	file = fopen("zvierata.txt", "r");
+	if (file == NULL) {
+		printf(" Zaznamy neboli nacitane\n");
+		exit(1);
+	}
 	
 
 
@@ -56,37 +60,32 @@ function_n(ZOZNAM* p_A) {
 		
 
 		fgets(buff, sizeof(buff), file);
+		buff[strlen(buff) - 1] = '\0';
 		strcpy(p_A[i].meno, buff);
 
 		fgets(buff, sizeof(buff), file);
+		buff[strlen(buff)-1] = '\0';
 		strcpy(p_A[i].druh, buff);
 
 		fgets(buff, sizeof(buff), file);
-		strcpy(p_A[i].vyska, buff);
+		buff[strlen(buff) - 1] = '\0';
+		p_A[i].vyska = atoi(buff);
 
 		fgets(buff, sizeof(buff), file);
-		strcpy(p_A[i].vaha, buff);
+		buff[strlen(buff) - 1] = '\0';
+		p_A[i].vaha = atof(buff);
 
 		fgets(buff, sizeof(buff), file);
-		strcpy(p_A[i].datum, buff);
+		buff[strlen(buff) - 1] = '\0';
+		p_A[i].datum = atoll(buff);
+	
+		fgets(buff, sizeof(buff), file);
+		buff[strlen(buff) - 1] = '\0';
+		p_A[i].krmenie = atoll(buff);
 
 		fgets(buff, sizeof(buff), file);
-		strcpy(p_A[i].krmenie, buff);
-
-		fgets(buff, sizeof(buff), file);
+		buff[strlen(buff) - 1] = '\0';
 		strcpy(p_A[i].meno_osetrovatela, buff);
-	}
-
-	for (int i = 0; i < 2; i++) {
-		puts("");
-		printf("Meno : %s", p_A[i].meno);
-		printf("Druh : %s", p_A[i].druh);
-		printf("Vyska : %s", p_A[i].vyska);
-		printf("Vaha : %s", p_A[i].vaha);
-		printf("datum : %s", p_A[i].datum);
-		printf("krmenie : %s", p_A[i].krmenie);
-		printf("osetrovatel : %s", p_A[i].meno_osetrovatela);
-		puts("");
 	}
 }
 
@@ -96,14 +95,13 @@ function_v(ZOZNAM* p_A) {
 
 	for (int i = 0; i < 2; i++) {
 		puts("");
-		printf("Meno : %s", p_A[i].meno);
-		printf("Druh : %s", p_A[i].druh);
-		printf("Vyska : %s", p_A[i].vyska);
-		printf("Vaha : %s", p_A[i].vaha);
-		printf("datum : %s", p_A[i].datum);
-		printf("krmenie : %s", p_A[i].krmenie);
-		printf("osetrovatel : %s", p_A[i].meno_osetrovatela);
-		puts("");
+		printf("Meno : %s\n", p_A[i].meno);
+		printf("Druh : %s\n", p_A[i].druh);
+		printf("Vyska : %d\n", p_A[i].vyska);
+		printf("Vaha : %g\n", p_A[i].vaha);
+		printf("datum : %lld\n", p_A[i].datum);
+		printf("krmenie : %lld\n", p_A[i].krmenie);
+		printf("osetrovatel : %s\n", p_A[i].meno_osetrovatela);
 	}
 }
 
