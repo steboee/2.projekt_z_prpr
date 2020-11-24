@@ -146,7 +146,7 @@ ZOZNAM *function_z(ZOZNAM* t) {
 		free(p);
 	}
 
-	printf("pozicia: %d\n", poc);
+	printf("Zviera s menom %s bolo vymazane\n",meno_z);
 	
 
 	return t ;
@@ -179,6 +179,33 @@ function_h(ZOZNAM* t) {
 	}
 }
 
+
+ZOZNAM* function_a(ZOZNAM* t) {
+	char meno_zvierata[51];
+	long long input_krmenie;
+	
+	ZOZNAM* p;
+	printf("Meno: ");
+	getchar();
+	fgets(meno_zvierata, sizeof(meno_zvierata), stdin);
+	meno_zvierata[strlen(meno_zvierata) - 1] = '\0';
+
+	printf("Novy datum krmenia: ");
+	scanf("%lld", &input_krmenie);
+	
+
+	p = t;
+
+	while (strcmp(meno_zvierata, p->meno) != 0) {   //pokial nepridem na dané meno zvierata v zozname
+		p = p->dalsi;								//postupujem na dalsi zoznam
+	}
+	p->krmenie = input_krmenie;   // zmena udaju na p->kremnie na hodnotu v input_krmenie
+	printf("Zviera s menom %s bolo naposledy nakrmene dna %lld\n", meno_zvierata, input_krmenie);
+
+	return t;
+}
+
+
 int main() {
 	char input;
 	ZOZNAM* zvierata = NULL;
@@ -195,6 +222,9 @@ int main() {
 		}
 		if (input == 'h') {
 			function_h(zvierata);
+		}
+		if (input == 'a') {
+			zvierata = function_a(zvierata);
 		}
 		if (input == 'k') {
 			printf("koniec\n");
