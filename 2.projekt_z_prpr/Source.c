@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#pragma warning(disable : 4996) // strcmpi() mi hádzalo warning
 
 typedef struct zoznam { // zoznam --> nazov struktury
 	char meno[50];
@@ -113,23 +114,42 @@ function_v(ZOZNAM* t) {
 	}
 }
 
-function_z(ZOZNAM* t) {
+ZOZNAM *function_z(ZOZNAM* t) {
 	printf("Nacitaj meno zvierata: ");
 	char meno_z[51];
-	ZOZNAM* p=NULL;
+	ZOZNAM* p=NULL,*p_pred =NULL;
 	p = t;
 	getchar();
 	fgets(meno_z, sizeof(meno_z), stdin);
+	
 	meno_z[strlen(meno_z) - 1] = '\0';
 
 	int poc = 1;
-	while (strcmp(p->meno, meno_z) != 0) {
-		poc++;
+	int a;
+	while (a = strcmpi(p->meno, meno_z) != 0) {
+	
+		p_pred = p;
 		p = p->dalsi;
+		poc++;
+		if (p == NULL) {						// Ak presiel vsetkymi menami a ani jedno sa nerovnalo
+			printf("MENO NIEJE V ZOZNAME!\n");
+				return t;
+		}
 	}
-	printf("pozicia: %d\n", poc);
 
-	return;
+	if (t == p) {
+		t = t->dalsi;
+		free(p);
+	}
+	else {
+		p_pred->dalsi = p->dalsi;
+		free(p);
+	}
+
+	printf("pozicia: %d\n", poc);
+	
+
+	return t ;
 }
 
 int main() {
@@ -144,7 +164,7 @@ int main() {
 			function_v(zvierata);
 		}
 		if (input == 'z') {
-			function_z(zvierata);
+			zvierata = function_z(zvierata);
 		}
 		if (input == 'k') {
 			printf("koniec\n");
