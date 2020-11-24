@@ -115,8 +115,57 @@ function_v(ZOZNAM* t) {
 }
 
 
-// PREPIS UDAJU V ZOZNAME NA DANOM MIESTE
+// PRIDANIE UDAJU V ZOZNAME NA DANÉ MIESTO
 ZOZNAM* function_p(ZOZNAM* t) {
+	int c1;
+	scanf("%d", &c1);
+	
+	char meno[50];
+	char druh[30];
+	int vyska;
+	double vaha;
+	long long datum;
+	long long krmenie;
+	char meno_osetrovatela[50];
+
+	printf("Meno: ");
+	getchar();
+	fgets(meno, sizeof(meno), stdin);
+	printf("Druh: ");
+	getchar();
+	fgets(druh, sizeof(druh), stdin);
+	printf("Vyska: ");
+	scanf("%d", &vyska);
+	printf("Vaha: ");
+	scanf("%g", &vaha);
+	printf("Datum: ");
+	scanf("%lld", &datum);
+	printf("Datum Krmenia: ");
+	scanf("%lld", &krmenie);
+	printf("Meno osetrovatela: ");
+	getchar();
+	fgets(meno_osetrovatela, sizeof(meno_osetrovatela), stdin);
+
+	
+	ZOZNAM* p;
+	p = t;
+	int pozicie = 0;
+	while (p!=NULL) {
+		p = p->dalsi;
+		pozicie++;
+		if (pozicie == c1) {
+
+		}
+	}
+	printf("pozicie : %d\n", pozicie);
+	
+	if (c1 >= pozicie+1) { // PRIDAM NA KONIEC ZOZNAMU
+		
+
+	}
+
+
+
 
 
 	return t;
