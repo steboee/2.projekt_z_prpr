@@ -8,14 +8,14 @@ typedef struct zoznam { // zoznam --> nazov struktury
 	char meno[50];
 	char druh[30];
 	int vyska;
-	float vaha;
+	double vaha;
 	long long datum;
 	long long krmenie;
 	char meno_osetrovatela[50];
 	struct zoznam* dalsi;
 }ZOZNAM;  // TYP (nieČo ako int, float)
 
-
+// VYTVORENIE ZOZNAMOV
 ZOZNAM* function_n(ZOZNAM* t) {
 	if (t != NULL) {
 		printf("Bolo Alokovane!\n");
@@ -61,7 +61,7 @@ ZOZNAM* function_n(ZOZNAM* t) {
 		fgets(buff, sizeof(buff), file);
 		buff[strlen(buff) - 1] = '\0';
 		p_new->vaha = atof(buff);
-
+		
 
 		fgets(buff, sizeof(buff), file);
 		buff[strlen(buff) - 1] = '\0';
@@ -94,9 +94,10 @@ ZOZNAM* function_n(ZOZNAM* t) {
 	return t;
 
 	
-}
+}		//VYTV
 
 
+// VYPIS DANÝCH ZOZNAMOV
 function_v(ZOZNAM* t) {
 	ZOZNAM* p = NULL;
 	p = t;
@@ -114,6 +115,15 @@ function_v(ZOZNAM* t) {
 }
 
 
+// PREPIS UDAJU V ZOZNAME NA DANOM MIESTE
+ZOZNAM* function_p(ZOZNAM* t) {
+
+
+	return t;
+}
+
+
+// ZMAZANIE ZÁZNAMU PODĽA MENA
 ZOZNAM *function_z(ZOZNAM* t) {
 	printf("Nacitaj meno zvierata: ");
 	char meno_z[51];
@@ -153,6 +163,7 @@ ZOZNAM *function_z(ZOZNAM* t) {
 }
 
 
+// VYPIS ZÁZNAMOV DO URČITÉHO DÁTUMU KRMENIA
 function_h(ZOZNAM* t) {
 	long long datumkrmenia;
 	printf("Nacitaj datum krmenia : ");
@@ -180,6 +191,7 @@ function_h(ZOZNAM* t) {
 }
 
 
+// ZMENA ÚDAJU KRMENIA
 ZOZNAM* function_a(ZOZNAM* t) {
 	char meno_zvierata[51];
 	long long input_krmenie;
@@ -206,6 +218,7 @@ ZOZNAM* function_a(ZOZNAM* t) {
 }
 
 
+
 int main() {
 	char input;
 	ZOZNAM* zvierata = NULL;
@@ -216,6 +229,9 @@ int main() {
 		}
 		if (input == 'v') {
 			function_v(zvierata);
+		}
+		if (input == 'p') {
+			zvierata = function_p(zvierata);
 		}
 		if (input == 'z') {
 			zvierata = function_z(zvierata);
