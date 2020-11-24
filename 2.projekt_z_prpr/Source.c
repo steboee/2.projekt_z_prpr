@@ -16,7 +16,6 @@ typedef struct zoznam { // zoznam --> nazov struktury
 }ZOZNAM;  // TYP (nieČo ako int, float)
 
 
-
 ZOZNAM* function_n(ZOZNAM* t) {
 	if (t != NULL) {
 		printf("Bolo Alokovane!\n");
@@ -101,7 +100,7 @@ ZOZNAM* function_n(ZOZNAM* t) {
 function_v(ZOZNAM* t) {
 	ZOZNAM* p = NULL;
 	p = t;
-	while (p->dalsi != NULL) {
+	while (p != NULL) {
 		printf("Meno: %s\n", p->meno);
 		printf("Druh: %s\n", p->druh);
 		printf("Vyska: %d\n", p->vyska);
@@ -113,6 +112,7 @@ function_v(ZOZNAM* t) {
 		p = p->dalsi;
 	}
 }
+
 
 ZOZNAM *function_z(ZOZNAM* t) {
 	printf("Nacitaj meno zvierata: ");
@@ -152,6 +152,33 @@ ZOZNAM *function_z(ZOZNAM* t) {
 	return t ;
 }
 
+
+function_h(ZOZNAM* t) {
+	long long datumkrmenia;
+	printf("Nacitaj datum krmenia : ");
+	scanf("%lld", &datumkrmenia);
+	
+	ZOZNAM* p = NULL;
+	p = t;
+	int poradie=1;
+	while (p != NULL) {
+		if (datumkrmenia>= p->krmenie) {
+			printf("%d.\n", poradie);
+			printf("Meno: %s\n", p->meno);
+			printf("Druh: %s\n", p->druh);
+			printf("Vyska: %d\n", p->vyska);
+			printf("Vaha: %g\n", p->vaha);
+			printf("Datum: %lld\n", p->datum);
+			printf("Krmenie: %lld\n", p->krmenie);
+			printf("Meno osetrovatela: %s\n", p->meno_osetrovatela);
+			puts("");
+			
+		}
+		p = p->dalsi;
+		poradie++;
+	}
+}
+
 int main() {
 	char input;
 	ZOZNAM* zvierata = NULL;
@@ -165,6 +192,9 @@ int main() {
 		}
 		if (input == 'z') {
 			zvierata = function_z(zvierata);
+		}
+		if (input == 'h') {
+			function_h(zvierata);
 		}
 		if (input == 'k') {
 			printf("koniec\n");
