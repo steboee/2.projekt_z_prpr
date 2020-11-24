@@ -17,6 +17,10 @@ typedef struct zoznam { // zoznam --> nazov struktury
 
 
 ZOZNAM* function_n(ZOZNAM* t) {
+	if (t != NULL) {
+		printf("Bolo Alokovane!\n");
+		return t;
+	}
 	FILE* file;
 	file = fopen("zvierata.txt", "r");
 	if (file == NULL) {
@@ -71,20 +75,25 @@ ZOZNAM* function_n(ZOZNAM* t) {
 		buff[strlen(buff) - 1] = '\0';
 		strcpy(p_new->meno_osetrovatela, buff);
 		if (t == NULL) {
-			p_new->dalsi = t;
+			p_new->dalsi = NULL;
 			t = p_new;
+		
 		}
 		else {
 			p = t;
 			while (p->dalsi != NULL) {
 				p = p->dalsi;
-			}
+ 			}
 			p_new->dalsi = p->dalsi;
 			p->dalsi = p_new;
-			
+
 		}
 	}
+	printf("Nacitalo sa %d zaznamov\n", n);
+	fclose(file);
 	return t;
+
+	
 }
 
 
@@ -104,6 +113,9 @@ function_v(ZOZNAM* t) {
 	}
 }
 
+ZOZNAM* function_z(ZOZNAM* t) {
+
+}
 
 int main() {
 	char input;
@@ -118,7 +130,18 @@ int main() {
 		}
 		if (input == 'k') {
 			printf("koniec\n");
+			while (zvierata != NULL){
+				ZOZNAM* temp;
+				temp = zvierata;
+				zvierata = zvierata->dalsi;
+				free(temp);
+			}
 			exit(1);
+					
+			
+		}
+		if (input == 'z') {
+			zvierata = function_z(zvierata);
 		}
 	}
 }
