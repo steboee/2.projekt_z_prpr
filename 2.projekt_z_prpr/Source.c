@@ -113,8 +113,23 @@ function_v(ZOZNAM* t) {
 	}
 }
 
-ZOZNAM* function_z(ZOZNAM* t) {
+function_z(ZOZNAM* t) {
+	printf("Nacitaj meno zvierata: ");
+	char meno_z[51];
+	ZOZNAM* p=NULL;
+	p = t;
+	getchar();
+	fgets(meno_z, sizeof(meno_z), stdin);
+	meno_z[strlen(meno_z) - 1] = '\0';
 
+	int poc = 1;
+	while (strcmp(p->meno, meno_z) != 0) {
+		poc++;
+		p = p->dalsi;
+	}
+	printf("pozicia: %d\n", poc);
+
+	return;
 }
 
 int main() {
@@ -128,6 +143,9 @@ int main() {
 		if (input == 'v') {
 			function_v(zvierata);
 		}
+		if (input == 'z') {
+			function_z(zvierata);
+		}
 		if (input == 'k') {
 			printf("koniec\n");
 			while (zvierata != NULL){
@@ -140,8 +158,6 @@ int main() {
 					
 			
 		}
-		if (input == 'z') {
-			zvierata = function_z(zvierata);
-		}
+		
 	}
 }
