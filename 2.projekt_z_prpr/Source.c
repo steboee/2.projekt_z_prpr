@@ -36,7 +36,6 @@ ZOZNAM* function_n(ZOZNAM* t) {
 			n++;
 		}
 	}
-	
 	ZOZNAM* p = NULL, *p_new = NULL;
 	fseek(file, 0, SEEK_SET);
 	for (int i = 0; i < n; i++) {
@@ -44,8 +43,6 @@ ZOZNAM* function_n(ZOZNAM* t) {
 		p_new = (ZOZNAM*)malloc(sizeof(ZOZNAM));
 		
 		fgets(buff, sizeof(buff), file);
-
-
 		fgets(buff, sizeof(buff), file);
 		buff[strlen(buff) - 1] = '\0';
 		strcpy(p_new->meno, buff);
@@ -77,7 +74,6 @@ ZOZNAM* function_n(ZOZNAM* t) {
 		if (t == NULL) {
 			p_new->dalsi = NULL;
 			t = p_new;
-		
 		}
 		else {
 			p = t;
@@ -119,56 +115,62 @@ function_v(ZOZNAM* t) {
 ZOZNAM* function_p(ZOZNAM* t) {
 	int c1;
 	scanf("%d", &c1);
-	
-	char meno[50];
-	char druh[30];
-	int vyska;
-	double vaha;
-	long long datum;
-	long long krmenie;
-	char meno_osetrovatela[50];
+	ZOZNAM* p_new;
+	p_new = (ZOZNAM*)malloc(sizeof(ZOZNAM));
+
 
 	printf("Meno: ");
 	getchar();
-	fgets(meno, sizeof(meno), stdin);
+	fgets(p_new->meno, sizeof(p_new->meno), stdin);
+	p_new->meno[strlen(p_new->meno) - 1] = '\0';
 	printf("Druh: ");
-	getchar();
-	fgets(druh, sizeof(druh), stdin);
+	fgets(p_new->druh, sizeof(p_new->druh), stdin);
+	p_new->druh[strlen(p_new->druh) - 1] = '\0';
 	printf("Vyska: ");
-	scanf("%d", &vyska);
+	scanf("%d", &p_new->vyska);
 	printf("Vaha: ");
-	scanf("%g", &vaha);
+	scanf("%lf", &p_new->vaha);
 	printf("Datum: ");
-	scanf("%lld", &datum);
+	scanf("%lld", &p_new->datum);
 	printf("Datum Krmenia: ");
-	scanf("%lld", &krmenie);
+	scanf("%lld", &p_new->krmenie);
 	printf("Meno osetrovatela: ");
 	getchar();
-	fgets(meno_osetrovatela, sizeof(meno_osetrovatela), stdin);
+	fgets(p_new->meno_osetrovatela, sizeof(p_new->meno_osetrovatela), stdin);
+	p_new->meno_osetrovatela[strlen(p_new->meno_osetrovatela)- 1] = '\0';
 
 	
 	ZOZNAM* p;
+
+	ZOZNAM* temp=NULL ,* pred=NULL;
 	p = t;
-	int pozicie = 0;
-	while (p!=NULL) {
-		p = p->dalsi;
-		pozicie++;
-		if (pozicie == c1) {
-
+	int pozicie = 1, ano = 0;
+	while (p->dalsi!=NULL) {
+		if (c1 == 1) {
+			temp = p;
+			p = p_new;
+			p_new->dalsi = temp;
+			p = p_new;
+			return p;
+			
 		}
-	}
-	printf("pozicie : %d\n", pozicie);
-	
-	if (c1 >= pozicie+1) { // PRIDAM NA KONIEC ZOZNAMU
-		
+		if (pozicie == c1 && c1 != 1) {
+			temp = pred->dalsi;
+			pred->dalsi = p_new;
+			p_new->dalsi = temp;
+			return t;
+		}
+		pozicie++;
+		pred = p;
+		p = p->dalsi;
 
 	}
-
-
-
-
-
+	p_new->dalsi = NULL;
+	p->dalsi = p_new;
 	return t;
+	
+	printf("pozicie : %d\n", pozicie);
+
 }
 
 
