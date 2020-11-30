@@ -224,6 +224,7 @@ function_h(ZOZNAM* t) {
 	
 	ZOZNAM* p = NULL;
 	p = t;
+	int nakrmene=0;
 	int poradie=1;
 	while (p != NULL) {
 		if (datumkrmenia>= p->krmenie) {
@@ -236,10 +237,13 @@ function_h(ZOZNAM* t) {
 			printf("Krmenie: %lld\n", p->krmenie);
 			printf("Meno osetrovatela: %s\n", p->meno_osetrovatela);
 			puts("");
-			
+			nakrmene++;	
 		}
 		p = p->dalsi;
 		poradie++;
+	}
+	if (nakrmene == 0) {
+		printf("Vsetky zvierata boli k datumu %lld nakrmene\n", datumkrmenia);
 	}
 }
 
@@ -276,7 +280,7 @@ ZOZNAM* function_a(ZOZNAM* t) {
 
 
 int main() {
-	char input=NULL;
+	char input;
 	ZOZNAM* zvierata = NULL;
 	printf("n - prikaz na nacitanie zaznamov zo suboru\n");
 	printf("v - prikaz na vypis celeho spajaneho zoznamu\n");
@@ -310,7 +314,6 @@ int main() {
 			zvierata = function_a(zvierata);
 		}
 		if (input == 'k') {
-			printf("koniec\n");
 			while (zvierata != NULL){
 				ZOZNAM* temp;
 				temp = zvierata;
