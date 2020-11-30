@@ -86,6 +86,7 @@ ZOZNAM* function_n(ZOZNAM* t) {
 		}
 	}
 	printf("Nacitalo sa %d zaznamov\n", n);
+	puts("");
 	fclose(file);
 	return t;
 
@@ -114,13 +115,14 @@ function_v(ZOZNAM* t) {
 // PRIDANIE UDAJU V ZOZNAME NA DANÉ MIESTO
 ZOZNAM* function_p(ZOZNAM* t) {
 	int c1;
+	printf("Pozicia noveho zaznamu : ");
 	scanf("%d", &c1);
+	getchar();
 	ZOZNAM* p_new;
 	p_new = (ZOZNAM*)malloc(sizeof(ZOZNAM));
 
 
 	printf("Meno: ");
-	getchar();
 	fgets(p_new->meno, sizeof(p_new->meno), stdin);
 	p_new->meno[strlen(p_new->meno) - 1] = '\0';
 	printf("Druh: ");
@@ -180,9 +182,8 @@ ZOZNAM *function_z(ZOZNAM* t) {
 	char meno_z[51];
 	ZOZNAM* p=NULL,*p_pred =NULL;
 	p = t;
-	getchar();
-	fgets(meno_z, sizeof(meno_z), stdin);
 	
+	fgets(meno_z, sizeof(meno_z), stdin);
 	meno_z[strlen(meno_z) - 1] = '\0';
 
 	int poc = 1;
@@ -219,6 +220,7 @@ function_h(ZOZNAM* t) {
 	long long datumkrmenia;
 	printf("Nacitaj datum krmenia : ");
 	scanf("%lld", &datumkrmenia);
+	getchar();
 	
 	ZOZNAM* p = NULL;
 	p = t;
@@ -249,32 +251,46 @@ ZOZNAM* function_a(ZOZNAM* t) {
 	
 	ZOZNAM* p;
 	printf("Meno: ");
-	getchar();
 	fgets(meno_zvierata, sizeof(meno_zvierata), stdin);
 	meno_zvierata[strlen(meno_zvierata) - 1] = '\0';
 
 	printf("Novy datum krmenia: ");
 	scanf("%lld", &input_krmenie);
-	
+	getchar();
 
 	p = t;
 
 	while (strcmp(meno_zvierata, p->meno) != 0) {   //pokial nepridem na dané meno zvierata v zozname
-		p = p->dalsi;								//postupujem na dalsi zoznam
+		p = p->dalsi;		
+		if (p == NULL) {						
+			printf("MENO NIEJE V ZOZNAME!\n");
+			
+			return t;
+		}
 	}
 	p->krmenie = input_krmenie;   // zmena udaju na p->kremnie na hodnotu v input_krmenie
 	printf("Zviera s menom %s bolo naposledy nakrmene dna %lld\n", meno_zvierata, input_krmenie);
-
 	return t;
 }
 
 
 
 int main() {
-	char input;
+	char input=NULL;
 	ZOZNAM* zvierata = NULL;
-
-	while (scanf("%c", &input)) {
+	printf("n - prikaz na nacitanie zaznamov zo suboru\n");
+	printf("v - prikaz na vypis celeho spajaneho zoznamu\n");
+	printf("p - prikaz na pridanie do spajaneho zoznamu\n");
+	printf("z - prikaz na zmazanie zaznamov podla mena zvierata\n");
+	printf("h - prikaz na vyhladanie a vypis poloziek podla datumu krmenia\n");
+	printf("a - prikaz na zmenu datumu krmenia\n");
+	printf("k - priaz na ukončenie programu\n");
+	while (scanf("%c",&input)) {
+		puts("");
+		puts("");
+		getchar();
+		
+	
 		if (input == 'n') {
 			zvierata = function_n(zvierata);
 		}
