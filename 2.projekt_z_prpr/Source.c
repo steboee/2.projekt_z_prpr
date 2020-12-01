@@ -17,15 +17,28 @@ typedef struct zoznam { // zoznam --> nazov struktury
 
 // VYTVORENIE ZOZNAMOV
 ZOZNAM* function_n(ZOZNAM* t) {
-	if (t != NULL) {
-		printf("Bolo Alokovane!\n");
-		return t;
+	
+	if (t != NULL) { // AK UŽ EXISTOVAL SPÁJANÝ ZOZNAM
+		printf("Zoznam uz bol alokovany!\n");
+		while (t != NULL) {
+			ZOZNAM* temp;
+			temp = t;
+			t = t->dalsi;
+			free(temp);
+		}
+		printf("Prebehla dealokacia!\n\n");
 	}
+	
+	
 	FILE* file;
 	file = fopen("zvierata.txt", "r");
-	if (file == NULL) {
+	
+	
+	if (file == NULL) {// AK SA NEPODARIL OTVORIŤ SUBOR
 		printf(" Zaznamy neboli nacitane\n");
 		exit(1);
+	
+	
 	}
 	fseek(file, 0, SEEK_SET);
 	char buff[100];
@@ -98,7 +111,9 @@ ZOZNAM* function_n(ZOZNAM* t) {
 function_v(ZOZNAM* t) {
 	ZOZNAM* p = NULL;
 	p = t;
+	int i = 1;
 	while (p != NULL) {
+		printf("%d.\n", i);
 		printf("Meno: %s\n", p->meno);
 		printf("Druh: %s\n", p->druh);
 		printf("Vyska: %d\n", p->vyska);
@@ -108,6 +123,7 @@ function_v(ZOZNAM* t) {
 		printf("Meno osetrovatela: %s\n", p->meno_osetrovatela);
 		puts("");
 		p = p->dalsi;
+		i++;
 	}
 }
 
@@ -324,6 +340,5 @@ int main() {
 					
 			
 		}
-		
 	}
 }
