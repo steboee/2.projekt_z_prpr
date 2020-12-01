@@ -37,23 +37,25 @@ ZOZNAM* function_n(ZOZNAM* t) {
 	if (file == NULL) {// AK SA NEPODARIL OTVORIŤ SUBOR
 		printf(" Zaznamy neboli nacitane\n");
 		exit(1);
-	
-	
 	}
+
+
 	fseek(file, 0, SEEK_SET);
 	char buff[100];
-	int n = 0;
+	int n = 0;				// pocet zaznamov zvierat
 	
-	while (fgets(buff, sizeof(buff), file) != NULL) {
-		if (strcmp(buff, "$$$\n") == 0) {
+	while (fgets(buff, sizeof(buff), file) != NULL) {//pokiaľ tam nieje prázdny riadok
+		if (strcmp(buff, "$$$\n") == 0) {	// ak narazíme na $$$ tak ide novy zaznam , čiže pripocitam 1 k aktualnemu poctu zaznamov (n)
 			n++;
 		}
 	}
-	ZOZNAM* p = NULL, *p_new = NULL;
+
+	ZOZNAM* p = NULL, *p_new = NULL;		//pomocne premenné
 	fseek(file, 0, SEEK_SET);
-	for (int i = 0; i < n; i++) {
+	
+	for (int i = 0; i < n; i++) {				// precházdam n-krát ( n = počet záznamov)
 		
-		p_new = (ZOZNAM*)malloc(sizeof(ZOZNAM));
+		p_new = (ZOZNAM*)malloc(sizeof(ZOZNAM));	// vytvorím si zoznam a nižšie doňho vkladám hodnoty
 		
 		fgets(buff, sizeof(buff), file);
 		fgets(buff, sizeof(buff), file);
@@ -84,18 +86,19 @@ ZOZNAM* function_n(ZOZNAM* t) {
 		fgets(buff, sizeof(buff), file);
 		buff[strlen(buff) - 1] = '\0';
 		strcpy(p_new->meno_osetrovatela, buff);
-		if (t == NULL) {
-			p_new->dalsi = NULL;
-			t = p_new;
+		
+		if (t == NULL) {			//Ak moj zoznam je prázdny
+			p_new->dalsi = NULL; // nastav dalsi na NULL
+			t = p_new;		
 		}
-		else {
-			p = t;
-			while (p->dalsi != NULL) {
+		else {		//Ak nieje prázdny 
+			p = t;						// p bude t
+			while (p->dalsi != NULL) {	// pokiaľ nieje p.dalsi NULL tak sa posuvaj v zozname dalej a dalej az kym prides na koniec
 				p = p->dalsi;
  			}
-			p_new->dalsi = p->dalsi;
-			p->dalsi = p_new;
-
+			p_new->dalsi = NULL;  //p_new->dalsi nastav na NULL , čiže to bude posledný záznam
+			p->dalsi = p_new;		// p mi teraz ukazuje na koniec záznamu a nanho napojim dalsi zoznam p_new
+				
 		}
 	}
 	printf("Nacitalo sa %d zaznamov\n", n);
@@ -104,7 +107,7 @@ ZOZNAM* function_n(ZOZNAM* t) {
 	return t;
 
 	
-}		//VYTV
+}		
 
 
 // VYPIS DANÝCH ZOZNAMOV
@@ -125,66 +128,74 @@ function_v(ZOZNAM* t) {
 		p = p->dalsi;
 		i++;
 	}
+	return;
 }
 
 
 // PRIDANIE UDAJU V ZOZNAME NA DANÉ MIESTO
 ZOZNAM* function_p(ZOZNAM* t) {
-	int c1;
+	int c1;										//pozicia noveho zaznamu
 	printf("Pozicia noveho zaznamu : ");
-	scanf("%d", &c1);
+	scanf("%d", &c1);		
 	getchar();
-	ZOZNAM* p_new;
-	p_new = (ZOZNAM*)malloc(sizeof(ZOZNAM));
+	ZOZNAM* p_new;								//vytvorim si pomocnú premennú typu ZOZNAM
+	p_new = (ZOZNAM*)malloc(sizeof(ZOZNAM));	
 
-
+	//VKLADAM DO p_new hodnoty
 	printf("Meno: ");
 	fgets(p_new->meno, sizeof(p_new->meno), stdin);
 	p_new->meno[strlen(p_new->meno) - 1] = '\0';
+	
 	printf("Druh: ");
 	fgets(p_new->druh, sizeof(p_new->druh), stdin);
 	p_new->druh[strlen(p_new->druh) - 1] = '\0';
+	
 	printf("Vyska: ");
 	scanf("%d", &p_new->vyska);
+	
 	printf("Vaha: ");
 	scanf("%lf", &p_new->vaha);
+	
 	printf("Datum: ");
 	scanf("%lld", &p_new->datum);
+	
 	printf("Datum Krmenia: ");
 	scanf("%lld", &p_new->krmenie);
+	
 	printf("Meno osetrovatela: ");
 	getchar();
 	fgets(p_new->meno_osetrovatela, sizeof(p_new->meno_osetrovatela), stdin);
 	p_new->meno_osetrovatela[strlen(p_new->meno_osetrovatela)- 1] = '\0';
 
 	
+
 	ZOZNAM* p;
 
 	ZOZNAM* temp=NULL ,* pred=NULL;
-	p = t;
+	p = t; // p bude moj zoznam ktorý už bol vytovrený v n
 	int pozicie = 1, ano = 0;
-	while (p->dalsi!=NULL) {
-		if (c1 == 1) {
-			temp = p;
-			p = p_new;
-			p_new->dalsi = temp;
-			p = p_new;
+	
+	while (p!=NULL) {			// prechádzaj spájaným zoznamom až dokým niesi na konci
+		if (c1 == 1) {					// ak c1=1 , čiže chcem vložiž nový zoznam na 1 pozíciu
+			temp = p;					// uložím si celý zoznam do temp
+			p_new->dalsi = temp;		// za p_new napojim moj zoznam
+			p = p_new;					// a naspäť do p si uložím p_new ( ktorý začína s záznamom ktorý som pridal a za nim su napojene ostatne zaznamy
 			return p;
 			
 		}
-		if (pozicie == c1 && c1 != 1) {
-			temp = pred->dalsi;
+		if (pozicie == c1 && c1 != 1) {		// Ak chcem niekde do stredu zoznamu uložiť nový záznam
+			temp = pred->dalsi;				// temp bude pred->dalsi
 			pred->dalsi = p_new;
 			p_new->dalsi = temp;
 			return t;
 		}
-		pozicie++;
-		pred = p;
-		p = p->dalsi;
+		pozicie++;							// pozicia v zozname sa mi navýši .
+		pred = p;							// pred uchová záznam ktorý je pred p
+		p = p->dalsi;						// posuniem sa na dalsi záznam
 
 	}
 	p_new->dalsi = NULL;
-	p->dalsi = p_new;
+	pred->dalsi = p_new;
 	return t;
 	
 	printf("pozicie : %d\n", pozicie);
