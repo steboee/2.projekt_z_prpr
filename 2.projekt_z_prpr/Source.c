@@ -194,11 +194,9 @@ ZOZNAM* function_p(ZOZNAM* t) {
 		p = p->dalsi;						// posuniem sa na dalsi záznam
 
 	}
-	p_new->dalsi = NULL;
-	pred->dalsi = p_new;
+	p_new->dalsi = NULL;			// Ak bolo c1 > ako pocet záznamov tak program dôojde až sem, p_new->dalsi nastavý na NULL,lebo ten záznam bude posledný
+	pred->dalsi = p_new;			// Aktuálne p = NULL, pred->dalsi mi ukazuje na p, čiže pred->dalsi mi bude ukazovat na nový záznam. takže som to napojil 
 	return t;
-	
-	printf("pozicie : %d\n", pozicie);
 
 }
 
@@ -206,33 +204,33 @@ ZOZNAM* function_p(ZOZNAM* t) {
 // ZMAZANIE ZÁZNAMU PODĽA MENA
 ZOZNAM *function_z(ZOZNAM* t) {
 	printf("Nacitaj meno zvierata: ");
-	char meno_z[51];
+	char meno_z[51];	
 	ZOZNAM* p=NULL,*p_pred =NULL;
 	p = t;
 	
-	fgets(meno_z, sizeof(meno_z), stdin);
+	fgets(meno_z, sizeof(meno_z), stdin);			// načíta meno zvierata na odstranenie
 	meno_z[strlen(meno_z) - 1] = '\0';
 
-	int poc = 1;
-	int a;
-	while (a = strcmpi(p->meno, meno_z) != 0) {
 	
-		p_pred = p;
-		p = p->dalsi;
-		poc++;
+	
+	while (strcmpi(p->meno, meno_z) != 0) {			// pokiaľ sa nerovná 
+	
+		p_pred = p;				// p_pred ukazuje na záznam pred p
+		p = p->dalsi;			// posun sa v zozname o 1 dalej 
+		
 		if (p == NULL) {						// Ak presiel vsetkymi menami a ani jedno sa nerovnalo
 			printf("MENO NIEJE V ZOZNAME!\n");
 				return t;
 		}
 	}
 
-	if (t == p) {
-		t = t->dalsi;
-		free(p);
+	if (t == p) {   // Odstraňujem prvý záznam
+		t = t->dalsi;	// posuň sa o 1 záznam dopredu 
+		free(p);		// vymaž prvý záznam
 	}
-	else {
-		p_pred->dalsi = p->dalsi;
-		free(p);
+	else {			//Odstaňujem iný než prvý
+		p_pred->dalsi = p->dalsi;	//p_pred->dalsi mi ukazuje na na p->dalsi čiže jeden prvok vynechal 
+		free(p); // uvolním to celé 
 	}
 
 	printf("Zviera s menom %s bolo vymazane\n",meno_z);
@@ -244,17 +242,22 @@ ZOZNAM *function_z(ZOZNAM* t) {
 
 // VYPIS ZÁZNAMOV DO URČITÉHO DÁTUMU KRMENIA
 function_h(ZOZNAM* t) {
+	if (t == NULL) {
+		printf("Nemas nacitany subor zvierata.txt\n");
+		return;
+	}
 	long long datumkrmenia;
 	printf("Nacitaj datum krmenia : ");
 	scanf("%lld", &datumkrmenia);
 	getchar();
 	
+	
 	ZOZNAM* p = NULL;
 	p = t;
-	int nakrmene=0;
-	int poradie=1;
+	int nenakrmene=0;		// premenná pre zistenie či nejaký zviera nebolo nakrmene
+	int poradie=1;			// premenná na očíslovanie
 	while (p != NULL) {
-		if (datumkrmenia>= p->krmenie) {
+		if (datumkrmenia>= p->krmenie) { // Ak zadany datum je ostro väčší ako datum zvierata tak zviera nebolo nakrmene...
 			printf("%d.\n", poradie);
 			printf("Meno: %s\n", p->meno);
 			printf("Druh: %s\n", p->druh);
@@ -264,12 +267,12 @@ function_h(ZOZNAM* t) {
 			printf("Krmenie: %lld\n", p->krmenie);
 			printf("Meno osetrovatela: %s\n", p->meno_osetrovatela);
 			puts("");
-			nakrmene++;	
+			nenakrmene++;	// inkrementujem pocet zvierat ktore neobli nakrmnene
 		}
-		p = p->dalsi;
-		poradie++;
+		p = p->dalsi; // posun sa v zozname o 1
+		poradie++;//premenná na očíslovanie
 	}
-	if (nakrmene == 0) {
+	if (nenakrmene == 0) {// Ak všetky zvierata boli nakrmene
 		printf("Vsetky zvierata boli k datumu %lld nakrmene\n", datumkrmenia);
 	}
 }
@@ -286,19 +289,19 @@ ZOZNAM* function_a(ZOZNAM* t) {
 	meno_zvierata[strlen(meno_zvierata) - 1] = '\0';
 
 	printf("Novy datum krmenia: ");
-	scanf("%lld", &input_krmenie);
+	scanf("%lld", &input_krmenie); // novy datum krmenia
 	getchar();
 
 	p = t;
 
 	while (strcmp(meno_zvierata, p->meno) != 0) {   //pokial nepridem na dané meno zvierata v zozname
-		p = p->dalsi;		
-		if (p == NULL) {						
+		p = p->dalsi;		//posun sa o 1 v zozname
+		if (p == NULL) {					// ak už prešiel celým zoznamom tak také meno sa nenchadzalo v zozname		
 			printf("MENO NIEJE V ZOZNAME!\n");
-			
 			return t;
 		}
 	}
+
 	p->krmenie = input_krmenie;   // zmena udaju na p->kremnie na hodnotu v input_krmenie
 	printf("Zviera s menom %s bolo naposledy nakrmene dna %lld\n", meno_zvierata, input_krmenie);
 	return t;
@@ -317,7 +320,6 @@ int main() {
 	printf("a - prikaz na zmenu datumu krmenia\n");
 	printf("k - priaz na ukončenie programu\n");
 	while (scanf("%c",&input)) {
-		puts("");
 		puts("");
 		getchar();
 		
